@@ -1,1 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacman</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(10, 50px); 
+            grid-template-rows: repeat(1, 50px); 
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 50px;
+        }
+        .pacman {
+            color: yellow;
+            font-weight: bold;
+        }
+        .ghost {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pacman</h1>
+    <p>Cliquez sur les boutons pour déplacer Pacman.</p>
+
+    <div class="board" id="board"></div>
+
+    <script>
+        
+        const boardSize = 10; 
+        let gameBoard = createGame(boardSize);
+
+        
+        renderBoard(gameBoard);
+
+        
+        function moveLeft() {
+            gameBoard = movePacmanLeft(gameBoard);
+            renderBoard(gameBoard);
+        }
+
+        function moveRight() {
+            gameBoard = movePacmanRight(gameBoard);
+            renderBoard(gameBoard);
+        }
+
+        
+        function createGame(n) {
+            const game = [];
+            for (let i = 0; i < n; i++) {
+                if (i === Math.floor(n / 2)) {
+                    game.push("C"); // Pacman
+                } else {
+                    game.push("."); // Pastille
+                }
+            }
+            const ghostIndex = Math.floor(Math.random() * n);
+            game[ghostIndex] = "^"; // Fantôme
+            const fruitIndex = Math.floor(Math.random() * n);
+            game[fruitIndex] = "@"; // Fruit
+            return game;
+        }
+
+       
+        function movePacmanLeft(game) {
+            const pacmanIndex = game.indexOf("C");
+            if (pacmanIndex > 0) {
+                game[pacmanIndex] = "";
+                game[pacmanIndex - 1] = "C";
+            }
+            return game;
+        }
+
+        
+        function movePacmanRight(game) {
+            const pacmanIndex = game.indexOf("C");
+            if (pacmanIndex < game.length - 1) {
+                game[pacmanIndex] = "";
+                game[pacmanIndex + 1] = "C";
+            }
+            return game;
+        }
+
+        
+        function renderBoard(game) {
+            const boardElement = document.getElementById("board");
+            boardElement.innerHTML = "";
+            game.forEach(piece => {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                if (piece === "C") {
+                    cell.classList.add("pacman");
+                } else if (piece === "^") {
+                    cell.classList.add("ghost");
+                }
+                cell.textContent = piece || ""; 
+                boardElement.appendChild(cell);
+            });
+        }
+    </script>
+
+    <button onclick="moveLeft()">Gauche</button>
+    <button onclick="moveRight()">Droite</button>
+</body>
+</html>
  
